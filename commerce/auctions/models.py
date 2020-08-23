@@ -3,3 +3,24 @@ from django.db import models
 
 class User(AbstractUser):
     pass
+
+class Listing(models.Model):
+    user = models.CharField(max_length=64)
+    title = models.CharField(max_length=64)
+    description = models.CharField(max_length=255)
+    photo = models.ImageField()
+    price = models.IntegerField()
+    numberBids = models.IntegerField()
+
+class Bid(models.Model):
+    product = models.CharField(max_length=64)
+    user = models.CharField(max_length=64)
+    price = models.IntegerField()
+
+class Comment(models.Model):
+    user = models.CharField(max_length=64)
+    comment = models.CharField(max_length=255)
+
+class Watchlist(models.Model):
+    user = models.CharField(max_length=64)
+    product = models.CharField(max_length=64)

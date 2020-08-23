@@ -9,10 +9,10 @@ from .models import User
 def index(request):
     return render(request, "auctions/index.html")
 
-def login(request):
+def login_(request):
     if request.method == "POST":
-        username = request.POST("username")
-        password = request.POST("password")
+        username = request.POST["username"]
+        password = request.POST["password"]
         user = authenticate(request, username = username, password = password)
 
         if user is not None:
@@ -25,16 +25,16 @@ def login(request):
     elif request.method == "GET":
         return render(request, "auctions/login.html")
 
-def logout(request):
+def logout_(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
 
 def register(request):
     if request.method == "POST":
-        username = request.POST("username")
-        email = request.POST("email")
-        password = request.POST("password")
-        confirmPassword = request.POST("confirmPassword")
+        username = request.POST["username"]
+        email = request.POST["email"]
+        password = request.POST["password"]
+        confirmPassword = request.POST["confirmPassword"]
 
         if password != confirmPassword:
             return render(request, "auctions/register.html", {

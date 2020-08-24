@@ -8,10 +8,13 @@ class Listing(models.Model):
     user = models.CharField(max_length=64)
     title = models.CharField(max_length=64)
     description = models.CharField(max_length=255)
-    imageURL = models.TextField(blank=True)
+    imageURL = models.URLField()
     price = models.IntegerField()
     numberBids = models.IntegerField()
     category = models.CharField(max_length=64)
+
+    def __str__(self):
+        return f"By {self.user}: {self.title}; Current Bid: ${self.price}; Category: {self.category}"
 
 class Bid(models.Model):
     product = models.CharField(max_length=64)

@@ -5,34 +5,38 @@
     <head>
         <title>{% block title %}Auctions{% endblock %}</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <link href="{% static 'auctions/main.css' %}" rel="stylesheet">
+        <!--<link href="{% static 'auctions/main.css' %}" rel="stylesheet">-->
     </head>
-    <body>
+    <body class="p-3">
         <h1>Auctions</h1>
-        <div>
-            {% if user.is_authenticated %}
-                Signed as <strong>{{ user.username }}</strong>.
-            {% else %}
-                Not signed in.
-            {% endif %}
-        </div>
+        {% if user.is_authenticated %}
+            Signed in as <strong>{{ user.username }}</strong>.
+        {% else %}
+            Not signed in.
+        {% endif %}
         <ul class="nav">
             <li class="nav-item">
-                <a class="nav-link btn btn-primary mx-2" href="{% url 'index' %}">Active Listings</a>
+                <a class="nav-link btn btn-primary m-1 mt-3" href="{% url 'index' %}">Active Listings</a>
             </li>
             {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link btn btn-primary mx-2" href="{% url 'logout' %}">Logout</a>
+                    <a class="nav-link btn btn-primary m-1 mt-3" href="{% url 'logout' %}">Logout</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link btn btn-primary mx-2" href="{% url 'create' %}">Create a New Listing</a>
+                    <a class="nav-link btn btn-primary m-1 mt-3" href="{% url 'create' user.username %}">Create a New Listing</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn btn-primary m-1 mt-3" href="{% url 'categories' %}">Categories</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn btn-primary m-1 mt-3" href="{% url 'index' %}">//TODO Watchlist</a>
                 </li>
             {% else %}
                 <li class="nav-item">
-                    <a class="nav-link btn btn-primary mx-2" href="{% url 'login' %}">Login</a>
+                    <a class="nav-link btn btn-primary m-1 mt-3" href="{% url 'login' %}">//Login</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link btn btn-primary mx-2" href="{% url 'register' %}">Register</a>
+                    <a class="nav-link btn btn-primary m-1 mt-3" href="{% url 'register' %}">Register</a>
                 </li>
             {% endif %}
         </ul>

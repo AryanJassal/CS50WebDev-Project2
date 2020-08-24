@@ -5,11 +5,14 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
-from .models import *
+from .models import User, Listing, Bid, Comment, Watchlist, CurrentBid
+
+categories = ["Technology", "Food", "Transportation", "Home", "Utilities", "Hobby", "Sports", "Fashion", "Other"]
 
 def index(request):
-    return render(request, "auctions/index.html")
+    return render(request, "auctions/index.html", {
+        "listings": Listing.objects.all()
+    })
 
 def login_(request):
     if request.method == "POST":
@@ -57,19 +60,39 @@ def register(request):
         return render(request, "auctions/register.html")
 
 @login_required
-def create(request):
+def create(request, user):
     if request.method == "POST":
         title = request.POST["title"]
-        desctiption = request.POST["description"]
+        description = request.POST["description"]
         startingBid = request.POST["startingBid"]
         imageURL= request.POST["imageURL"]
         category = request.POST["category"]
 
         listing = Listing(
-            user = "a",
+            user = user,
             title = title,
             description = description,
-            startingBid = startingBid,
+            price = float(startingBid),
             imageURL = imageURL,
-            category = category
+            category = category,
+            numberBids = 0
         )
+        listing.save()
+
+        return HttpResponseRedirect(reverse("index"))
+    elif request.method == "GET":
+        return render(request, "auctions/createListings.html", {
+            "categories": categories
+        })
+
+def categories_(request):
+    return render(request, "auctions/categoryMain.html", {
+        "categories": categories
+    })
+
+def categoriesFiltered(request, category):
+    return render(request, "auctions/categoryFiltered.html", {
+        "categories": categories,
+        "listings": Listing.objects.all(),
+        "filterName": category
+    })

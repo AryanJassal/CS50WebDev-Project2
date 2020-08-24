@@ -1,0 +1,15 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}
+    <h2>{{ filterName }}</h2>
+
+    {% for listing in listings %}
+        {% if listing.category == filterName %}
+            <li>
+                {{ listing }}
+            </li>
+        {% endif %}
+    {% empty %}
+        <h5>No listings for category.</h5>
+    {% endfor %}
+{% endblock %}

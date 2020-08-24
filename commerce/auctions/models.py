@@ -8,9 +8,10 @@ class Listing(models.Model):
     user = models.CharField(max_length=64)
     title = models.CharField(max_length=64)
     description = models.CharField(max_length=255)
-    photo = models.ImageField()
+    imageURL = models.TextField(blank=True)
     price = models.IntegerField()
     numberBids = models.IntegerField()
+    category = models.CharField(max_length=64)
 
 class Bid(models.Model):
     product = models.CharField(max_length=64)
@@ -24,3 +25,7 @@ class Comment(models.Model):
 class Watchlist(models.Model):
     user = models.CharField(max_length=64)
     product = models.CharField(max_length=64)
+
+class CurrentBid(models.Model):
+    user = models.CharField(max_length=64)
+    listing = models.CharField(max_length=64)

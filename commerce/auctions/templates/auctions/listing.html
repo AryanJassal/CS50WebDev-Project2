@@ -1,0 +1,24 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}
+    <h3>{{ title }}</h3>
+
+    <p>{{ owner }}</p>
+    <p>{{ description }}</p>
+    <p>${{ price }}</p>
+
+    {{ wishlisted }}
+
+    {% if user.is_authenticated %}
+        <form action="{% url 'watchlist' title user.username %}" method="POST">
+            {% csrf_token %} 
+            
+            {% if wishlisted == False %}
+                <input class="btn btn-primary" type="submit" value="Add to Watchlist" />
+            {% else %}
+                <input class="btn btn-danger" type="submit" value="Remove from Watchlist" />
+            {% endif %}
+        </form>
+    {% endif %}
+
+{% endblock %}

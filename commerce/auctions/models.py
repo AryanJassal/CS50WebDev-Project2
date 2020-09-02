@@ -5,7 +5,7 @@ class User(AbstractUser):
     pass
 
 class Listing(models.Model):
-    user = models.CharField(max_length=64)
+    owner = models.CharField(max_length=64)
     title = models.CharField(max_length=64)
     description = models.CharField(max_length=255)
     imageURL = models.URLField()

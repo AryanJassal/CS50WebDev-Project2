@@ -2,11 +2,15 @@
 
 {% block body %}
     <h2>Active Listings</h2>
-
-    {% for listing in listings %}
-        <li>
-            {{ listing }}
-        </li>
+    
+    <div class="container-fluid">
+        {% for listing in listings %}
+            <div class="row" style="height: 400px;">
+                <div class="col">
+                    <a href="{% url 'listing' listing.title %}">{{ listing }}</a>
+                </div>
+            </div>
+    </div>
     {% empty %}
         <h5>No listings on site.</h5>
     {% endfor %}

@@ -14,7 +14,7 @@ class Listing(models.Model):
     category = models.CharField(max_length=64)
 
     def __str__(self):
-        return f"By {self.user}: {self.title}; Current Bid: ${self.price}; Category: {self.category}"
+        return f"By {self.owner}: {self.title}; Current Bid: ${self.price}; Category: {self.category}"
 
 class Bid(models.Model):
     product = models.CharField(max_length=64)
@@ -28,6 +28,9 @@ class Comment(models.Model):
 class Watchlist(models.Model):
     user = models.CharField(max_length=64)
     product = models.CharField(max_length=64)
+
+    def __str__(self):
+        return f"Product: {self.product}"
 
 class CurrentBid(models.Model):
     user = models.CharField(max_length=64)

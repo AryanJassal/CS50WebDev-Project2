@@ -7,10 +7,7 @@ from django.urls import reverse
 
 from .models import User, Listing, Bid, Comment, Watchlist, CurrentBid
 
-wishlisted = None
-
-categories = ["Technology", "Food", "Transportation", "Home",
-              "Utilities", "Hobby", "Sports", "Fashion", "Other"]
+categories = ["Technology", "Food", "Transportation", "Home", "Utilities", "Hobby", "Sports", "Fashion", "Other"]
 
 
 def index(request):
@@ -68,7 +65,7 @@ def register(request):
 
 
 @login_required
-def create(request, user):
+def create(request):
     if request.method == "POST":
         title = request.POST["title"]
         description = request.POST["description"]
@@ -77,7 +74,7 @@ def create(request, user):
         category = request.POST["category"]
 
         listing = Listing(
-            user=user,
+            user=request.user.usename,
             title=title,
             description=description,
             price=float(startingBid),
@@ -94,7 +91,7 @@ def create(request, user):
         })
 
 
-def categories_(request):
+def categories(request):
     return render(request, "auctions/categoryMain.html", {
         "categories": categories
     })
@@ -111,6 +108,11 @@ def categoriesFiltered(request, category):
 def listing(request, title):
     item = Listing.objects.get(title=title)
 
+    if Watchlist.objects.filter(product=title, user=request.user.username).first() != None:
+        wishlisted = True
+    else:
+        wishlisted = False
+
     return render(request, "auctions/listing.html", {
         "title": title,
         "owner": item.owner,
@@ -119,24 +121,28 @@ def listing(request, title):
         "wishlisted": wishlisted
     })
 
+@login_required
+def displayWatchlist(request):
+    return render(request, "auctions/watchlist.html", {
+        "entries": Watchlist.objects.all()
+    })
 
-def watchlist(request, username, title):
+@login_required
+def watchlist(request, title):
     if request.method == "POST":
 
-        item = Watchlist.objects.filter(user=username, product=title).first()
+        item = Watchlist.objects.filter(user=request.user.username, product=title).first()
 
         if item == None:
             newWatchlist = Watchlist(
                 product=title,
-                user=username
+                user=request.user.username
             )
             newWatchlist.save()
-            wishlisted = True
 
             return HttpResponseRedirect(reverse("listing", kwargs={"title": title}))
 
         else:
             item.delete()
-            wishlisted = False
 
             return HttpResponseRedirect(reverse("listing", kwargs={"title": title}))

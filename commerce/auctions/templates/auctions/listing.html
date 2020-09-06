@@ -7,10 +7,8 @@
     <p>{{ description }}</p>
     <p>${{ price }}</p>
 
-    {{ wishlisted }}
-
     {% if user.is_authenticated %}
-        <form action="{% url 'watchlist' title user.username %}" method="POST">
+        <form action="{% url 'watchlist' title %}" method="POST">
             {% csrf_token %} 
             
             {% if wishlisted == False %}

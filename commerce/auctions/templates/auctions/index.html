@@ -6,8 +6,17 @@
     <div class="container-fluid">
         {% for listing in listings %}
             <div class="row" style="height: 400px;">
-                <div class="col">
-                    <a href="{% url 'listing' listing.title %}">{{ listing }}</a>
+                <div class="col" style="display: flex;">
+                    <div style="height: 100%; width: 500px; float: left; text-align:center; border-style: solid;">
+                        <img src="{{ listing.imageURL }}">
+                    </div>
+                    <div style="float: right; width: auto;">
+                        By: {{ listing.owner }}
+                        <br>
+                        Description: {{ listing.description }}
+                        <br>
+                        <a href="{% url 'listing' listing.title %}" class="btn btn-primary">View Listing</a>
+                    </div> 
                 </div>
             </div>
     </div>

@@ -5,10 +5,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, Listing, Bid, Comment, Watchlist, CurrentBid
+from .models import User, Listing, Bid, Comment, Watchlist, CurrentBid, Categories
 
-categories = ["Technology", "Food", "Transportation", "Home", "Utilities", "Hobby", "Sports", "Fashion", "Other"]
-
+#categories = ["Technology", "Food", "Transportation", "Home", "Utilities", "Hobby", "Sports", "Fashion", "Other"]
 
 def index(request):
     return render(request, "auctions/index.html", {
@@ -74,7 +73,7 @@ def create(request):
         category = request.POST["category"]
 
         listing = Listing(
-            user=request.user.usename,
+            user=request.user.username,
             title=title,
             description=description,
             price=float(startingBid),
@@ -87,13 +86,13 @@ def create(request):
         return HttpResponseRedirect(reverse("index"))
     elif request.method == "GET":
         return render(request, "auctions/createListings.html", {
-            "categories": categories
+            "categories": Categories.objects.all()
         })
 
 
 def categories(request):
     return render(request, "auctions/categoryMain.html", {
-        "categories": categories
+        "categories": Categories.objects.all()
     })
 
 
@@ -118,14 +117,17 @@ def listing(request, title):
         "owner": item.owner,
         "description": item.description,
         "price": item.price,
+        "imageLink": item.imageURL,
         "wishlisted": wishlisted
     })
+
 
 @login_required
 def displayWatchlist(request):
     return render(request, "auctions/watchlist.html", {
         "entries": Watchlist.objects.all()
     })
+
 
 @login_required
 def watchlist(request, title):

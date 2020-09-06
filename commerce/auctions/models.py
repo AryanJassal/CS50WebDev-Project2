@@ -35,3 +35,9 @@ class Watchlist(models.Model):
 class CurrentBid(models.Model):
     user = models.CharField(max_length=64)
     listing = models.CharField(max_length=64)
+
+class Categories(models.Model):
+    category = models.CharField(max_length=32)
+
+    def __str__(self):
+        return self.category

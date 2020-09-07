@@ -6,21 +6,26 @@
     <div class="container-fluid">
         {% for listing in listings %}
             <div class="row" style="height: 400px;">
-                <div class="col" style="display: flex;">
-                    <div style="height: 100%; width: 500px; float: left; text-align:center; border-style: solid;">
-                        <img src="{{ listing.imageURL }}">
+                <div class="col" style="display: flex; height: 100%;">
+                    <div style="height: 100%; width: 500px; float: left; text-align: center; border-right: 1px solid gray;">
+                        <img src="{{ listing.imageURL }}" height="100%" width="100%" style="object-fit: cover; padding-right: 17px;">
                     </div>
-                    <div style="float: right; width: auto;">
-                        By: {{ listing.owner }}
+                    <div style="float: right; width: auto; padding: 20px;">
+                        <h3>{{ listing.title }}</h3>
                         <br>
-                        Description: {{ listing.description }}
+                        <strong>Current Bid:</strong> ${{ listing.price }}
                         <br>
-                        <a href="{% url 'listing' listing.title %}" class="btn btn-primary">View Listing</a>
+                        <strong>Description:</strong> {{ listing.indexDescription }}
+                        <br>
+                        <strong>Category: </strong><a href="{% url 'categoriesFiltered' listing.category %}" class="btn btn-link">{{ listing.category }}</a>
+                        <br>
+                        <a href="{% url 'listing' listing.title %}" class="btn btn-primary mr-4 mt-4">View Listing</a>
                     </div> 
                 </div>
             </div>
+            <br>
+        {% empty %}
+            <h5>No listings on site.</h5>
+        {% endfor %}
     </div>
-    {% empty %}
-        <h5>No listings on site.</h5>
-    {% endfor %}
 {% endblock %}

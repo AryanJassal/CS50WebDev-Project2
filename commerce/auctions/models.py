@@ -8,6 +8,7 @@ class Listing(models.Model):
     owner = models.CharField(max_length=64)
     title = models.CharField(max_length=64)
     description = models.CharField(max_length=255)
+    indexDescription = models.CharField(max_length=255)
     imageURL = models.URLField()
     price = models.IntegerField()
     numberBids = models.IntegerField()

@@ -3,27 +3,24 @@
 {% block body %}
     <h2>New Listing</h2>
 
-    <form action="{% url 'create' %}" method="POST">
+    <form action="{% url 'create' %}" method="POST" autocomplete="off">
         {% csrf_token %}
         <div class="form-group">
-            <input autofocus class="form-control" type="text" name="title" placeholder="Title">
+            <input autofocus class="form-control" type="text" name="title" placeholder="Title" required>
         </div>
         <div class="form-group">
-            <input class="form-control" type="text" name="description" placeholder="Description">
+            <textarea class="form-control r-5" type="text" name="description" placeholder="Description" rows="5" required></textarea>
         </div>
         <div class="form-group">
-            <input class="form-control" type="number" name="startingBid" placeholder="Starting Bid">
+            <input class="form-control" type="number" name="startingBid" placeholder="Starting Bid" required>
         </div>
         <div class="form-group">
-            <input class="form-control" type="text" name="imageURL" placeholder="Image URL">
+            <textarea class="form-control" type="text" name="imageURL" placeholder="Image URL (optional)" rows="3"></textarea>
         </div>
         <div class="form-group">
-            <!--<input class="form-control" list="categories" name="category" placeholder="Category">-->
-            <select id="category" multiple class="form-control">
+            <select name="category" class="form-control" required>
                 {% for category in categories %}
                     <option value="{{ category }}">{{ category }}</option>
-                {% empty %}
-                    <option value="Technology">Technology</option>
                 {% endfor %}
             </select>
         </div>

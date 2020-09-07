@@ -70,12 +70,24 @@ def create(request):
         description = request.POST["description"]
         startingBid = request.POST["startingBid"]
         imageURL = request.POST["imageURL"]
-        category = request.POST["category"]
+        categoryList = request.POST.getlist("category")
+
+        iDescription = ""
+
+        for i in categoryList:
+            category = i
+
+        if imageURL == "":
+            imageURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/600px-No_image_available.svg.png"
+
+        if len(description) > 100:
+            iDescription = description[0:100] + "..."
 
         listing = Listing(
-            user=request.user.username,
+            owner=request.user.username,
             title=title,
             description=description,
+            indexDescription=iDescription,
             price=float(startingBid),
             imageURL=imageURL,
             category=category,
@@ -125,7 +137,7 @@ def listing(request, title):
 @login_required
 def displayWatchlist(request):
     return render(request, "auctions/watchlist.html", {
-        "entries": Watchlist.objects.all()
+        "entries": Watchlist.objects.filter(user=request.user.username)
     })
 
 

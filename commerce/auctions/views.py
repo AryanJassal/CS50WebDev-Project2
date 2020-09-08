@@ -80,8 +80,8 @@ def create(request):
         if imageURL == "":
             imageURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/600px-No_image_available.svg.png"
 
-        if len(description) > 100:
-            iDescription = description[0:100] + "..."
+        if len(description) > 255:
+            iDescription = description[0:255] + "..."
 
         listing = Listing(
             owner=request.user.username,

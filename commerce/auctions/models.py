@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from datetime import datetime
 
 class User(AbstractUser):
     pass
@@ -13,6 +14,7 @@ class Listing(models.Model):
     price = models.IntegerField()
     numberBids = models.IntegerField()
     category = models.CharField(max_length=64)
+    whenMade = models.DateTimeField(default=datetime.now, editable=False)
 
     def __str__(self):
         return f"By {self.owner}: {self.title}; Current Bid: ${self.price}; Category: {self.category}"

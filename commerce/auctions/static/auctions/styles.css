@@ -17,9 +17,7 @@ html, body
     font-size: 15pt;
 }
 
-.when-made-text
+.btn-default:hover
 {
-    font-size: 11pt;
-    color: gray;
-    margin: 10px;
+    background-color: rgb(210, 210, 210) !important;
 }

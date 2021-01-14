@@ -1,0 +1,51 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-lg-7 col-sm-12">
+                <div class="col login-container p-3 px-4">
+                    <form action="{% url 'register' %}" method="POST" autocomplete="off">
+                        {% csrf_token %}
+
+                        <h2 class="title login-title text-info">Register</h2>
+
+                        {% if errors %}
+                            {% for error in errors %}
+                                <div class="alert alert-danger alert-dismissable fade show" role="alert">
+                                    {{ error }}
+                                    <a class="close" data-dismiss="alert" style="outline: none; cursor:pointer;"><span>&times;</span></a>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="form-group">
+                            <label class="form-label text-info">Username <span class="require">*</span></label>
+                            {{ form.username }}
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label text-info">Password <span class="require">*</span></label>
+                            {{ form.password }}
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label text-info">Confirm Password <span class="require">*</span></label>
+                            {{ form.confirmPassword }}
+                        </div>
+
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-info form-control" value="Register">
+                        </div>
+
+                        <div>
+                            <p class="require">* Required fields.</p>
+                        </div>
+
+                        <p style="font-family: 'Open Sans', sans-serif; font-size: 15px;">Are you already a member? <a href="{% url 'login' %}" class="text-info">Login here.</a></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

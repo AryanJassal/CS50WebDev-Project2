@@ -1,0 +1,36 @@
+<div class="container-fluid">
+    {% for listing in listings %}
+        <div class="row general-row" style="height: 400px;">
+            <div class="col" style="display: flex; height: 100%;">
+                <div style="height: 100%; width: 500px; float: left; text-align: center; border-right: 1px solid gray; min-width: 500px;">
+                    <img src="{{ listing.imageURL }}" class="img-responsive" onerror="this.onerror = false; this.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/600px-No_image_available.svg.png';">
+                </div>
+                <div style="float: right; width: auto; padding: 20px;">
+                    <h3>{{ listing.title }}</h3>
+                    <br>
+                    <strong>Description:</strong> {{ listing.indexDescription }}
+                    <br>
+                    <strong>Current Bid:</strong> ${% if listing.bid_set.all.first.amount %}{{ listing.bid_set.all.first.amount }}{% else %}{{ listing.price }}{% endif %}
+                    <br>
+                    <strong>Categories: </strong>
+                    {% for category in listing.categories.all %}
+                        {% if forloop.last %}
+                            <a href="{% url 'categoriesFiltered' category.slug %}">{{ category }}</a>
+                        {% else %}
+                            <a href="{% url 'categoriesFiltered' category.slug %}">{{ category }}</a>,
+                        {% endif %}
+                    {% empty %}
+                        <span>None specified.</span>
+                    {% endfor %}
+                    <br>
+                    <a href="{% url 'listing' listing.pk %}" class="btn btn-primary mr-4 my-4">View Listing</a>
+                    <br>
+                    <p style="font-size: 13pt; margin: 10px; position: absolute; bottom: 0; right: 0;">Created on {{ listing.timestamp }} by {{ listing.owner }}</p>
+                </div>
+            </div>
+        </div>
+        <br>
+    {% empty %}
+        <h5>No listings on site.</h5>
+    {% endfor %}
+</div>

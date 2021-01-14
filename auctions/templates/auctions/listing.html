@@ -1,0 +1,141 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}
+    {% if listing.closed == False %}
+        <div class="container-fluid" style="height: 50px; width: auto;">
+            <h3 class="float-left">{{ listing.title }}</h3>
+
+            {% if user.is_authenticated %}
+                <form action="{% url 'watchlist' listing.pk %}" method="POST" class="float-right">
+                    {% csrf_token %} 
+                    
+                    {% if wishlisted == None %}
+                        <input class="btn btn-success" type="submit" value="Add to Watchlist" />
+                    {% else %}
+                        <input class="btn btn-danger" type="submit" value="Remove from Watchlist" />
+                    {% endif %}
+                </form>
+
+                {% if user == listing.owner %}
+                    <form action="{% url 'closeBid' listing.pk %}" method="POST" class="float-right">
+                        {% csrf_token %}
+                        <input class="btn btn-danger mx-3" type="submit" value="Close Listing" />
+                    </form>
+                {% endif %}
+            {% endif %}
+        </div>
+        
+        <div class="img-div">
+            <img src="{{ listing.imageURL }}" class="img-responsive" style="height: 450px;" onerror="this.onerror = false; this.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/600px-No_image_available.svg.png';">
+        </div>
+        <div style="padding-left: 15px;">
+
+            <div class="bid-div">
+                <p class="price-tag">Current bid: ${{ price }}</p>
+                <p class="mb-1"><strong>Current Bidder: </strong> {{ currentBidder }}</p>
+                <p><strong>{{ numberBids }} bid(s)</strong> have been placed on this item so far.</p>
+
+                {% if message %}
+                    <div class="alert alert-danger alert-dismissable fade show" role="alert">
+                        {{ message }}
+                        <a class="close" data-dismiss="alert">&times;</a>
+                    </div>
+                {% endif %}
+                
+                {% if user.is_authenticated %}
+                    <form method="POST" action="{% url 'bid' listing.pk %}">
+                        {% csrf_token %}
+
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">$</span>
+                            </div>
+
+                            <input type="number" class="form-control" step="0.01" name="amount" placeholder="Enter Bid Amount...">
+                        </div>
+                        
+                        <input type="submit" class="btn btn-primary my-3" value="Place Bid!">
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}" class="ml-2">Login</a> to submit a bid or add this to your watchlist.
+                {% endif %}
+            </div>
+
+            <p class="mt-3"><strong>Listing By: </strong> {{ listing.owner }}</p>
+            <p class="mt-3"><strong>Description: </strong> {{ listing.description }}</p>
+            <hr>
+            <h3 class="my-3">Comments</h3>
+
+            {% if user.is_authenticated %}
+
+                {% if comMessage %}
+                    <div class="alert alert-danger alert-dismissable fade show" role="alert">
+                        {{ comMessage }}
+                        <a class="close" data-dismiss="alert">&times;</a>
+                    </div>
+                {% endif %}
+
+                <form class="pb-5" action="{% url 'comment' listing.pk %}" method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="from-group">
+                        <textarea placeholder="Comment here..." rows="5" name="comment" class="form-control" maxlength="500" minlength="1"></textarea>
+                    </div>
+                    <div class="container-fluid">
+                        <input type="submit" value="Post Comment" class="btn btn-primary float-right mt-3">
+                    </div>
+                </form>
+
+            {% else %}
+                <h5 class="ml-3"><a href="{% url 'login' %}">Login</a> to post comments.</h5>
+            {% endif %}
+            <hr>
+            <div class="container-fluid">
+                {% for comment in comments %}
+                <div class="row my-3 general-row" style="min-height: 80px; border: 1px solid gray;">
+                    <div class="col">
+                        <p class="comment-top mb-1">Posted on {{ comment.timestamp }} by {{ comment.user }}</p>
+                        <hr class="mt-1">
+                        <div class="p-2 my-3">
+                            {{ comment }}
+                        </div>
+                    </div>
+                </div>
+                    
+                {% empty %}
+                    <h4 class="ml-4">No comments yet.</h4>
+                {% endfor %}
+            </div>
+        </div>
+
+    {% else %}
+
+        <div style="height: 100px; padding: 30px"></div>
+
+        <h1 style="text-align: center;">
+            {% if currentBidder == None %}
+                No One Won.
+            {% else %}
+                Congratulations!
+            {% endif %}
+        </h1>
+
+        <div style="height: 100px; padding: 30px"></div>
+
+        {% if user.username == currentBidder.username %}
+            <h3 style="text-align: center;">You won <strong>{{ title }}</strong> for <strong>${{ price }}</strong>!</h3>
+        {% elif currentBidder == None %}
+            <h3 style="text-align: center;">The listing <strong>{{ title }}</strong> was closed before anyone could bid.</h3>
+        {% else %}
+            <h3 style="text-align: center;">User {{ currentBidder }} won <strong>{{ title }}</strong> for <strong>${{ price }}</strong>!</h3>
+        {% endif %}
+
+        <div style="height: 50px; padding: 30px"></div>
+
+        <div style="text-align: center;">
+            <a class="btn btn-light" href="{% url 'index' %}">Go Back</a>
+        </div>
+
+    {% endif %}
+
+{% endblock %}

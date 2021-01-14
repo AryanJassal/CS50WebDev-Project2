@@ -1,0 +1,46 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-lg-7 col-sm-12">
+                <div class="col login-container p-3 px-4">
+                    <form action="{% url 'login' %}" method="POST" autocomplete="off">
+                        {% csrf_token %}
+
+                        <h2 class="title login-title text-info">Login</h2>
+
+                        {% if errors %}
+                            {% for error in errors %}
+                                <div class="alert alert-danger alert-dismissable fade show" role="alert">
+                                    {{ error }}
+                                    <a class="close" data-dismiss="alert" style="outline: none; cursor:pointer;"><span>&times;</span></a>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="form-group">
+                            <label class="form-label text-info">Username <span class="require">*</span></label>
+                            {{ form.username }}
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label text-info">Password <span class="require">*</span></label>
+                            {{ form.password }}
+                        </div>
+
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-info form-control" value="Login">
+                        </div>
+
+                        <div>
+                            <p class="require">* Required fields.</p>
+                        </div>
+                    </form>
+
+                    <p class="mb-1" style="font-family: 'Open Sans', sans-serif; font-size: 15px;">New here? <a href="{% url 'register' %}" class="text-info">Sign up.</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

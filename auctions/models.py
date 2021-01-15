@@ -24,7 +24,7 @@ class Listing(models.Model):
     indexDescription = models.TextField(max_length=255)
     imageURL = models.URLField()
     price = models.DecimalField(decimal_places=2, max_digits=10)
-    categories = models.ManyToManyField(Categories)
+    categories = models.ManyToManyField(Categories, blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     closed = models.BooleanField(default=False)
 

@@ -206,7 +206,7 @@ def watchlist(request, pk):
             return redirect('listing', pk=pk)
 
         else:
-            item.delete()
+            watch.delete()
 
             return redirect('listing', pk=pk)
 
@@ -218,7 +218,12 @@ def bid(request, pk):
 
         item = Listing.objects.get(pk=pk)
 
-        if item.price > float(amount):
+        try:
+            price = Bid.objects.filter(listing=item).first().amount
+        except AttributeError:
+            price = item.price
+
+        if price > float(amount):
             try:
                 wishlisted = Watchlist.objects.get(listing=item, user=request.user)
             except Watchlist.DoesNotExist:
@@ -241,6 +246,7 @@ def bid(request, pk):
                 'comments': Comment.objects.filter(listing=item),
                 'numberBids': item.bid_set.all().count(),
                 'currentBidder': currentBidder,
+                'message': 'The bid must be greater than the current highest bid.'
             })
         else:
             newBid = Bid(
